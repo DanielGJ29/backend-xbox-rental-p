@@ -1,5 +1,5 @@
 //Model
-const { VideoGame } = require("../apiServices/videogames/videoGame.model");
+const { VideoGame } = require("../apiServices/videoGames/videoGame.model");
 const {
   VideoGameName,
 } = require("../apiServices/videoGameName/videoGameName.model");

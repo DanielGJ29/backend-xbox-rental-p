@@ -9,12 +9,8 @@ const { filterObj } = require("../../util/filterObj");
 
 //Models
 const { VideoGame } = require("./videoGame.model");
-const {
-  VideoGameName,
-} = require("../../apiServices/videoGameName/videoGameName.model");
-const {
-  VideoGameModel,
-} = require("../../apiServices/videoGameModel/videoGameModel.model");
+const { VideoGameName } = require("../videoGameName/videoGameName.model");
+const { VideoGameModel } = require("../videoGameModel/videoGameModel.model");
 
 //?NEW VIDEO GAME
 exports.createVideoGame = catchAsync(async (req, res, next) => {
