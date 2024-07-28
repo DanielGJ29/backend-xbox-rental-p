@@ -97,7 +97,7 @@ router.post("/login", login);
 
 router.post("/refreshToken", refreshToken);
 
-//router.use(validateSession);
+router.use(validateSession);
 /**
  * @swagger
  * /api/v1/users:
@@ -117,7 +117,7 @@ router.post("/refreshToken", refreshToken);
  */
 router.post(
   "/",
-  //protecAdmin,
+  protecAdmin,
   upload.single("avatarUrl"),
   createUserValidators,
   validateResult,
