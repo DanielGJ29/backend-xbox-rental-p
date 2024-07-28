@@ -12,7 +12,7 @@ fs.readdirSync(patchRouterApiServices).filter((folder) => {
 
   if (onlyRoutes) {
     const nameRoute = removeExtension(onlyRoutes);
-    // console.log("file---->", onlyRoutes);
+    //console.log("file---->", onlyRoutes);
     //console.log("name ruta", nameRoute);
     router.use(
       `/${nameRoute}`,

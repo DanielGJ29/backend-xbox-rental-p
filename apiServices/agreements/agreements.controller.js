@@ -8,7 +8,7 @@ const { QueryTypes, Op } = require("sequelize");
 
 //Models
 const { Cart } = require("../carts/cart.model");
-const { VideoGame } = require("../videogames/videoGame.model");
+const { VideoGame } = require("../videoGame/videoGame.model.js");
 const { ProductInCart } = require("../../Models/productInCart.model");
 const { Product } = require("../../Models/product.model");
 const { Gamepad } = require("../../apiServices/gamepads/gamepad.model");

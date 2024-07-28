@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { Client } = require("../apiServices/clients/client.model");
 const { Documents } = require("../apiServices/documents/documents");
-const { VideoGame } = require("../apiServices/videoGames/videoGame.model.js");
+const { VideoGame } = require("../apiServices/videoGame/videoGame.model.js");
 const {
   VideoGameName,
 } = require("../apiServices/videoGameName/videoGameName.model.js");
