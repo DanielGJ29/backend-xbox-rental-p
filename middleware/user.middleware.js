@@ -1,5 +1,5 @@
 //Models
-const { User } = require("../Models/user.model");
+const { User } = require("../apiServices/users/user.model");
 
 //Utils
 const { catchAsync } = require("../util/catchAsync");
@@ -26,8 +26,12 @@ exports.protectAccountOwner = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const { currentUser } = req;
 
-  if (currentUser.id !== +id) {
-    return next(new AppError(403, "You can't update other users account"));
+  if (currentUser.role === "admin") {
+    next();
+  } else {
+    if (currentUser.id !== +id) {
+      return next(new AppError(403, "You can't update other users account"));
+    }
   }
 
   next();

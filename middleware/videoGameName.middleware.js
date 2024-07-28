@@ -1,5 +1,7 @@
 //Model
-const { VideoGameName } = require("../Models/videoGameName.model");
+const {
+  VideoGameName,
+} = require("../apiServices/videoGameName/videoGameName.model");
 
 //Util
 const { catchAsync } = require("../util/catchAsync");

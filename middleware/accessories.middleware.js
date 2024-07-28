@@ -1,5 +1,5 @@
 //Model
-const { Accessory } = require("../Models/accessories.model");
+const { Accessory } = require("../apiServices/accessories/accessories.model");
 
 //Util
 const { catchAsync } = require("../util/catchAsync");
@@ -18,6 +18,16 @@ exports.accessoryExist = catchAsync(async (req, res, next) => {
   }
 
   req.accessory = accessory;
+
+  next();
+});
+
+exports.converterToLowerCase = catchAsync(async (req, res, next) => {
+  req.body.name = req.body.name.toLowerCase();
+  req.body.model = req.body.model.toLowerCase();
+  req.body.color = req.body.color.toLowerCase();
+  req.body.serialNumber = req.body.serialNumber.toLowerCase();
+  req.body.characteristics = req.body.characteristics.toLowerCase();
 
   next();
 });

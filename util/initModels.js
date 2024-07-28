@@ -1,12 +1,16 @@
 const { DataTypes } = require("sequelize");
-const { Client } = require("../Models/client.model");
-const { Documents } = require("../Models/documents");
-const { VideoGame } = require("../Models/videoGame.model");
-const { VideoGameName } = require("../Models/videoGameName.model");
-const { VideoGameModel } = require("../Models/videoGameModel.model");
-const { Gamepad } = require("../Models/gamepad.model");
+const { Client } = require("../apiServices/clients/client.model");
+const { Documents } = require("../apiServices/documents/documents");
+const { VideoGame } = require("../apiServices/videogames/videoGame.model.js");
+const {
+  VideoGameName,
+} = require("../apiServices/videoGameName/videoGameName.model.js");
+const {
+  VideoGameModel,
+} = require("../apiServices/videoGameModel/videoGameModel.model");
+const { Gamepad } = require("../apiServices/gamepads/gamepad.model");
 
-const { Cart } = require("../Models/cart.model");
+const { Cart } = require("../apiServices/carts/cart.model");
 const { ProductInCart } = require("../Models/productInCart.model");
 const { Product } = require("../Models/product.model");
 
@@ -17,16 +21,16 @@ const initModels = () => {
 
   //1 videoGameName <--> M videogame
   //VideoGameName.hasMany(VideoGame, { foreignKey: { type: DataTypes.UUID } });
-  VideoGameName.hasMany(VideoGame, { foreignKey: "nameId" });
-  VideoGame.belongsTo(VideoGameName, { foreignKey: "nameId" });
+  // VideoGameName.hasMany(VideoGame, { foreignKey: "nameId" });
+  // VideoGame.belongsTo(VideoGameName, { foreignKey: "nameId" });
 
   // 1 videoGameModel <--> M videoGame
-  VideoGameModel.hasMany(VideoGame, { foreignKey: "modelId" });
-  VideoGame.belongsTo(VideoGameModel, { foreignKey: "modelId" });
+  // VideoGameModel.hasMany(VideoGame, { foreignKey: "modelId" });
+  // VideoGame.belongsTo(VideoGameModel, { foreignKey: "modelId" });
 
   // videogameName 1 <--> M Gamepad
-  VideoGameName.hasMany(Gamepad);
-  Gamepad.belongsTo(VideoGameName);
+  // VideoGameName.hasMany(Gamepad);
+  // Gamepad.belongsTo(VideoGameName);
 
   //CART
   //M Cart <--> M Product

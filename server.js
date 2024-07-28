@@ -4,6 +4,9 @@ const { app } = require("./app.js");
 const { sequelize } = require("./util/database");
 const { initModels } = require("./util/initModels");
 
+//Swagger Doc
+const { swaggerDocs } = require("./util/swagger");
+
 //Database authenticated
 sequelize
   .authenticate()
@@ -25,4 +28,5 @@ sequelize
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Express app runing on port: ${PORT}`);
+  swaggerDocs(app);
 });

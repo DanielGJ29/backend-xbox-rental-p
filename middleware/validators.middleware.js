@@ -78,6 +78,11 @@ exports.createClientValidators = [
     .withMessage("socialNetworkId must by a integer")
     .notEmpty()
     .withMessage("socialNetworkId provide a valid socialNetworkId "),
+  body("linkSocialNetwork")
+    .isString()
+    .withMessage("linkSocialNetwork must by a string")
+    .notEmpty()
+    .withMessage("linkSocialNetwork provide a valid linkSocialNetwork "),
   body("street")
     .isString()
     .withMessage("street must by a string")

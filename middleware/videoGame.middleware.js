@@ -1,7 +1,11 @@
 //Model
-const { VideoGame } = require("../Models/videoGame.model");
-const { VideoGameName } = require("../Models/videoGameName.model");
-const { VideoGameModel } = require("../Models/videoGameModel.model");
+const { VideoGame } = require("../apiServices/videogames/videoGame.model");
+const {
+  VideoGameName,
+} = require("../apiServices/videoGameName/videoGameName.model");
+const {
+  VideoGameModel,
+} = require("../apiServices/videoGameModel/videoGameModel.model");
 
 //Util
 const { catchAsync } = require("../util/catchAsync");
@@ -13,7 +17,7 @@ exports.videoGameExist = catchAsync(async (req, res, next) => {
   //Check if the game exists with the id
   const videoGame = await VideoGame.findOne({
     where: { status: "active", id },
-    attributes: { exclude: ["nameId", "modelId"] },
+    // attributes: { exclude: ["nameId", "modelId"] },
     include: [VideoGameName, VideoGameModel],
   });
 

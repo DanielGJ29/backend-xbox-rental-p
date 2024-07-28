@@ -1,6 +1,8 @@
 //Model
-const { Gamepad } = require("../Models/gamepad.model");
-const { VideoGameName } = require("../Models/videoGameName.model");
+const { Gamepad } = require("../apiServices/gamepads/gamepad.model");
+const {
+  VideoGameName,
+} = require("../apiServices/videoGameName/videoGameName.model");
 
 //Util
 const { catchAsync } = require("../util/catchAsync");
@@ -12,7 +14,7 @@ exports.gamepadExist = catchAsync(async (req, res, next) => {
   //Check if the game exists with the id
   const gamepad = await Gamepad.findOne({
     where: { status: "active", id },
-    attributes: { exclude: ["videoGameNameId"] },
+    //attributes: { exclude: ["videoGameNameId"] },
     include: [VideoGameName],
   });
 

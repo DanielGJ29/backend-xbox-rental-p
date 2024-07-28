@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const { promisify } = require("util");
 
 // Models
-const { User } = require("../Models/user.model");
+const { User } = require("../apiServices/users/user.model");
 
 //Utils
 const { AppError } = require("../util/appError");
@@ -22,7 +22,7 @@ exports.validateSession = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError(400, "Invalid session", "04"));
+    return next(new AppError(400, "Invalid session"));
   }
 
   const decodedToken = await promisify(jwt.verify)(
@@ -36,7 +36,7 @@ exports.validateSession = catchAsync(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new AppError(401, "Invalid session", "04"));
+    return next(new AppError(401, "Invalid session"));
   }
 
   req.currentUser = user;
@@ -46,7 +46,12 @@ exports.validateSession = catchAsync(async (req, res, next) => {
 
 exports.protecAdmin = catchAsync(async (req, res, next) => {
   if (req.currentUser.role !== "admin") {
-    return next(new AppError(403, "Access denie", "12"));
+    return next(
+      new AppError(
+        403,
+        "No cuenta con los permisos suficientes /\nAccess denie"
+      )
+    );
   }
 
   next();
