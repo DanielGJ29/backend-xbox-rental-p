@@ -117,7 +117,7 @@ router.post("/refreshToken", refreshToken);
  */
 router.post(
   "/",
-  protecAdmin,
+  //protecAdmin,
   upload.single("avatarUrl"),
   createUserValidators,
   validateResult,
