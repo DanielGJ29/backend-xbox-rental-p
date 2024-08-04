@@ -213,9 +213,9 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
     });
 
     if (!product) {
-      res.status(200).json({
+      res.status(400).json({
         status: "fail",
-        message: `consola con id: ${productId.id} no disponible`,
+        message: `consola con ID: ${productId.id} no disponible`,
       });
       return;
     }
@@ -227,9 +227,9 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
     });
 
     if (!product) {
-      res.status(200).json({
+      res.status(400).json({
         status: "fail",
-        message: `consola con id: ${productId.id} no disponible`,
+        message: `Control con ID: ${productId.id} no disponible`,
       });
       return;
     }
@@ -241,9 +241,9 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
     });
 
     if (!product) {
-      res.status(200).json({
+      res.status(400).json({
         status: "fail",
-        message: `consola con id: ${productId.id} no disponible`,
+        message: `Accesorio con ID: ${productId.id} no disponible`,
       });
       return;
     }
@@ -269,6 +269,7 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
         where: {
           articleId: productId.id,
           articleType: productId.articleType,
+          status: "active",
         },
       },
     ],
@@ -277,7 +278,8 @@ exports.addProductToCart = catchAsync(async (req, res, next) => {
   if (productExiste.length > 0) {
     res.status(200).json({
       status: "success",
-      message: `Articulo con id: ${productId.id} ya existe en el carrito`,
+      //message: `Articulo con id: ${productId.id} ya existe en el carrito`,
+      message: `Articulo previamente agregado`,
     });
     return;
   }
@@ -346,7 +348,7 @@ exports.addProductToCartMultiple = catchAsync(async (req, res, next) => {
     if (product.length === 0) {
       res.status(200).json({
         status: "fail",
-        message: `consola con id: ${productId.id} no encontrado`,
+        message: `consola con ID: ${productId.id} no encontrado`,
       });
       return;
     }
@@ -361,7 +363,7 @@ exports.addProductToCartMultiple = catchAsync(async (req, res, next) => {
     if (product.length === 0) {
       res.status(200).json({
         status: "fail",
-        message: `Control con id: ${productId.id} no encontrado`,
+        message: `Control con ID: ${productId.id} no encontrado`,
       });
       return;
     }
@@ -376,7 +378,7 @@ exports.addProductToCartMultiple = catchAsync(async (req, res, next) => {
     if (product.length === 0) {
       res.status(200).json({
         status: "fail",
-        message: `Accesorio con id: ${productId.id} no encontrado`,
+        message: `Accesorio con ID: ${productId.id} no encontrado`,
       });
       return;
     }
@@ -461,10 +463,11 @@ exports.addProductToCartMultiple = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: [
-        `Articulo con id: ${noRepetidos} agregados correctamente`,
-        `Articulos con id no agregados ${idsRepetidos}`,
-      ],
+      // message: [
+      //   `Articulo con id: ${noRepetidos} agregados correctamente`,
+      //   `Articulos con id no agregados ${idsRepetidos}`,
+      // ],
+      message: [`Articulos agregados correctamente`],
     });
     return;
   }
@@ -484,7 +487,7 @@ exports.addProductToCartMultiple = catchAsync(async (req, res, next) => {
     status: "success",
     message: [
       `Articulo con id: ${noRepetidos} agregados correctamente`,
-      `Articulos con id no agregados ${idsRepetidos}`,
+      // `Articulos con id no agregados ${idsRepetidos}`,
     ],
   });
 });

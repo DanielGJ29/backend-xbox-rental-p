@@ -193,37 +193,41 @@ exports.searchByKeyword = catchAsync(async (req, res, next) => {
     //dowload url img
     const accessoriesPromises = accessory.map(async (item) => {
       let imgDownloadUrl;
-      const imgRef = ref(storage, item.imgUrl);
+      if (item.imgUrl) {
+        const imgRef = ref(storage, item.imgUrl);
 
-      imgDownloadUrl = await getDownloadURL(imgRef)
-        .then((url) => {
-          // Insert url into an <img> tag to "download"
-          return url;
-        })
-        .catch((error) => {
-          // A full list of error codes is available at
-          // https://firebase.google.com/docs/storage/web/handle-errors
-          switch (error.code) {
-            case "storage/object-not-found":
-              // File doesn't exist
-              console.log("File doesn't exist");
-              return null;
-            case "storage/unauthorized":
-              // User doesn't have permission to access the object
-              console.log("User doesn't have permission to access the object");
-              break;
-            case "storage/canceled":
-              // User canceled the upload
-              console.log("User canceled the upload");
-              break;
+        imgDownloadUrl = await getDownloadURL(imgRef)
+          .then((url) => {
+            // Insert url into an <img> tag to "download"
+            return url;
+          })
+          .catch((error) => {
+            // A full list of error codes is available at
+            // https://firebase.google.com/docs/storage/web/handle-errors
+            switch (error.code) {
+              case "storage/object-not-found":
+                // File doesn't exist
+                console.log("File doesn't exist");
+                return null;
+              case "storage/unauthorized":
+                // User doesn't have permission to access the object
+                console.log(
+                  "User doesn't have permission to access the object"
+                );
+                break;
+              case "storage/canceled":
+                // User canceled the upload
+                console.log("User canceled the upload");
+                break;
 
-            // ...
+              // ...
 
-            case "storage/unknown":
-              // Unknown error occurred, inspect the server response
-              break;
-          }
-        });
+              case "storage/unknown":
+                // Unknown error occurred, inspect the server response
+                break;
+            }
+          });
+      }
       item.imgUrl = imgDownloadUrl;
 
       return item;
