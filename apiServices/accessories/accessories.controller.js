@@ -6,6 +6,7 @@ const { catchAsync } = require("../../util/catchAsync");
 const { storage } = require("../../util/firebase");
 const { AppError } = require("../../util/appError");
 const { filterObj } = require("../../util/filterObj");
+const { getUrl } = require("../../util/dowloadUrl");
 
 //Models
 const { Accessory } = require("./accessories.model");
@@ -31,18 +32,22 @@ exports.createAccessory = catchAsync(async (req, res, next) => {
   }
 
   // Upload file
-  let countId = 1;
-  const accessories = await Accessory.max("id");
-  if (accessories) {
-    countId = accessories + 1;
-  }
+  let result;
+  let imgDownloadUrl = null;
+  if (req.file) {
+    let countId = 1;
+    const accessories = await Accessory.max("id");
+    if (accessories) {
+      countId = accessories + 1;
+    }
 
-  const imgRef = ref(
-    storage,
-    `Accesories img/${countId}-${Date.now()}-accessory`
-  );
-  const result = await uploadBytes(imgRef, req.file.buffer);
-  const imgDownloadUrl = await getDownloadURL(imgRef);
+    const imgRef = ref(
+      storage,
+      `Accesories img/${countId}-${Date.now()}-accessory`
+    );
+    result = await uploadBytes(imgRef, req.file.buffer);
+    imgDownloadUrl = await getDownloadURL(imgRef);
+  }
 
   //Query create
   const newAccessory = await Accessory.create({
@@ -52,7 +57,7 @@ exports.createAccessory = catchAsync(async (req, res, next) => {
     serialNumber,
     characteristics,
     rentalPrice,
-    imgUrl: result.metadata.fullPath,
+    imgUrl: req.file ? result.metadata.fullPath : null,
     userId: currentUser.id,
   });
 
@@ -67,9 +72,13 @@ exports.getAllAccessory = catchAsync(async (req, res, next) => {
 
   //dowload img
   const accessoriesPromises = accessories.map(async (item) => {
-    const imgRef = ref(storage, item.imgUrl);
-    const imgDownloadUrl = await getDownloadURL(imgRef);
-    item.imgUrl = imgDownloadUrl;
+    let url = null;
+    if (item.imgUrl) {
+      url = await getUrl(item.imgUrl);
+    }
+    // const imgRef = ref(storage, item.imgUrl);
+    // const imgDownloadUrl = await getDownloadURL(imgRef);
+    item.imgUrl = url;
     return item;
   });
 
@@ -83,9 +92,12 @@ exports.getAccessoryById = catchAsync(async (req, res, next) => {
   const { accessory } = req;
 
   //dowload img
-  const imgRef = ref(storage, accessory.imgUrl);
-  const imgDownloadUrl = await getDownloadURL(imgRef);
-  accessory.imgUrl = imgDownloadUrl;
+  let url;
+  if (accessory.imgUrl) {
+    url = await getUrl(accessory.imgUrl);
+  }
+
+  accessory.imgUrl = url;
 
   res.status(200).json({ status: "success", data: accessory });
 });

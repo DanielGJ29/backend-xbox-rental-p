@@ -166,10 +166,8 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     //actualiza avatar si existe una url previamente registrada
     //Update avatar if a previously registered url exists
     if (imgRef.fullPath) {
-      console.log("hay un path");
       const result = await uploadBytes(imgRef, req.file.buffer);
     } else {
-      console.log("no hay un path se creara url");
       //Crea nueva url para el nuevo avatar
       //Create new url for the new avatar
 
@@ -193,7 +191,8 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     "lastName",
     "motherLastName",
     "email",
-    "userName"
+    "userName",
+    "role"
   );
 
   if (resultUploadBytes) {
