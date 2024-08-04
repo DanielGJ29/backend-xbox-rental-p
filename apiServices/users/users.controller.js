@@ -18,6 +18,7 @@ const {
   generateRefreshToken,
   generateToken,
 } = require("../../util/tokenManager.js");
+const { getUrl } = require("../../util/dowloadUrl.js");
 
 const { Sequelize } = require("sequelize");
 
@@ -45,11 +46,15 @@ exports.getAllUsers = catchAsync(async (req, res) => {
       createdAt,
       updatedAt,
     }) => {
-      let imgDownloadUrl;
+      let imgDownloadUrl = null;
+      console.log("avatarUrl", avatarUrl);
+      //const imgRef = ref(storage, avatarUrl);
+      //imgDownloadUrl = await getDownloadURL(imgRef);
       if (avatarUrl) {
-        const imgRef = ref(storage, avatarUrl);
-        imgDownloadUrl = await getDownloadURL(imgRef);
+        const url = await getUrl(avatarUrl);
+        imgDownloadUrl = url;
       }
+
       return {
         id,
         name,
@@ -58,7 +63,7 @@ exports.getAllUsers = catchAsync(async (req, res) => {
         email,
         userName,
         password,
-        avatarUrl: avatarUrl ? imgDownloadUrl : null,
+        avatarUrl: imgDownloadUrl,
         role,
         status,
         createdAt,

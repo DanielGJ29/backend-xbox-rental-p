@@ -10,6 +10,7 @@ const { storage } = require("../../util/firebase");
 const { AppError } = require("../../util/appError");
 const { filterObj } = require("../../util/filterObj");
 const { Sequelize, Op } = require("sequelize");
+const { getUrl } = require("../../util/dowloadUrl.js");
 
 //CRUD
 
@@ -119,19 +120,29 @@ exports.getAllClients = catchAsync(async (req, res, next) => {
 
   //dowload url img
   const userPromises = clients.map(async (client) => {
-    const imgRef = ref(storage, client.avatarUrl);
-    const imgDownloadUrl = await getDownloadURL(imgRef);
+    let imgDownloadUrl = null;
+    if (client.avatarUrl) {
+      // const imgRef = ref(storage, client.avatarUrl);
+      // imgDownloadUrl = await getDownloadURL(imgRef);
+      const url = await getUrl(imgRefIneFront);
+      imgDownloadUrl = url;
+    }
     client.avatarUrl = imgDownloadUrl;
 
     //dowload img docuemnts
     await Promise.all(
       client.documents.map(async (doc) => {
+        let imgDownloadUrlIneFront;
+        let imgDownloadUrlIneReverse;
+
         const imgRefIneFront = ref(storage, doc.docIneFront);
         const imgRefIneReverse = ref(storage, doc.docIneReverse);
-        const imgDownloadUrlIneFront = await getDownloadURL(imgRefIneFront);
-        const imgDownloadUrlIneReverse = await getDownloadURL(imgRefIneReverse);
-        doc.docIneFront = imgDownloadUrlIneFront;
-        doc.docIneReverse = imgDownloadUrlIneReverse;
+
+        const urlFront = await getUrl(imgRefIneFront);
+        const urlReverse = await getUrl(imgRefIneReverse);
+
+        doc.docIneFront = urlFront;
+        doc.docIneReverse = urlReverse;
       })
     );
     return client;

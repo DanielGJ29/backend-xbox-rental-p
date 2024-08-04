@@ -91,7 +91,7 @@ exports.getAllVideoGame = catchAsync(async (req, res, next) => {
     if (item.imgUrl) {
       // Create a storage reference from our storage service
       const imgRef = ref(storage, item.imgUrl);
-      console.log("imgRef", imgRef.url);
+
       const urlStorage = imgRef.url;
       if (urlStorage) {
         imgDownloadUrl = await getDownloadURL(imgRef);
