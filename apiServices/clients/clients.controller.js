@@ -121,12 +121,8 @@ exports.getAllClients = catchAsync(async (req, res, next) => {
   //dowload url img
   const userPromises = clients.map(async (client) => {
     let imgDownloadUrl = null;
-    if (client.avatarUrl) {
-      // const imgRef = ref(storage, client.avatarUrl);
-      // imgDownloadUrl = await getDownloadURL(imgRef);
-      const url = await getUrl(imgRefIneFront);
-      imgDownloadUrl = url;
-    }
+    if (client.avatarUrl) imgDownloadUrl = await getUrl(client.avatarUrl);
+
     client.avatarUrl = imgDownloadUrl;
 
     //dowload img docuemnts
@@ -135,14 +131,14 @@ exports.getAllClients = catchAsync(async (req, res, next) => {
         let imgDownloadUrlIneFront;
         let imgDownloadUrlIneReverse;
 
-        const imgRefIneFront = ref(storage, doc.docIneFront);
-        const imgRefIneReverse = ref(storage, doc.docIneReverse);
+        if (doc.docIneFront)
+          imgDownloadUrlIneFront = await getUrl(doc.docIneFront);
 
-        const urlFront = await getUrl(imgRefIneFront);
-        const urlReverse = await getUrl(imgRefIneReverse);
+        if (doc.docIneReverse)
+          imgDownloadUrlIneReverse = await getUrl(doc.docIneReverse);
 
-        doc.docIneFront = urlFront;
-        doc.docIneReverse = urlReverse;
+        doc.docIneFront = imgDownloadUrlIneFront;
+        doc.docIneReverse = imgDownloadUrlIneReverse;
       })
     );
     return client;
