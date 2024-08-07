@@ -41,9 +41,11 @@ exports.createAccessory = catchAsync(async (req, res, next) => {
       countId = accessories + 1;
     }
 
+    const lastIndexExt = req.file.originalname.lastIndexOf(".");
+    const ext = req.file.originalname.slice(lastIndexExt);
     const imgRef = ref(
       storage,
-      `Accesories img/${countId}-${Date.now()}-accessory`
+      `portfolio/accesories/${countId}-${Date.now()}-accessory${ext}`
     );
     result = await uploadBytes(imgRef, req.file.buffer);
     imgDownloadUrl = await getDownloadURL(imgRef);

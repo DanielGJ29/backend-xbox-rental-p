@@ -50,14 +50,29 @@ exports.createClient = catchAsync(async (req, res, next) => {
     countId = client + 1;
   }
 
-  const imgRefAvatar = ref(storage, `Client img/${countId}-${Date.now()}`);
+  const lastIndexExt = req.files.avatarUrl[0].originalname.lastIndexOf(".");
+  const ext = req.files.avatarUrl[0].originalname.slice(lastIndexExt);
+  const imgRefAvatar = ref(
+    storage,
+    `portfolio/client/ID-${countId}-${Date.now()}-client${ext}`
+  );
+
+  const lastIndexExtFront =
+    req.files.docIneFront[0].originalname.lastIndexOf(".");
+  const extIneFront =
+    req.files.docIneFront[0].originalname.slice(lastIndexExtFront);
   const imgRefDocIneFront = ref(
     storage,
-    `ClientDocs/${countId}-ineFront-${Date.now()}`
+    `portfolio/clientDocs/IDClient-${countId}-${Date.now()}-ineFront${extIneFront}`
   );
+
+  const lastIndexExtReverse =
+    req.files.docIneReverse[0].originalname.lastIndexOf(".");
+  const extIneReverse =
+    req.files.docIneFront[0].originalname.slice(lastIndexExtReverse);
   const imgRefDocIneReverse = ref(
     storage,
-    `ClientDocs/${countId}-ineReverse-${Date.now()}`
+    `portfolio/clientDocs/IDClient-${countId}-${Date.now()}-ineReverse${extIneReverse}`
   );
 
   const resultAvatar = await uploadBytes(

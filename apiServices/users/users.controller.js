@@ -47,9 +47,6 @@ exports.getAllUsers = catchAsync(async (req, res) => {
       updatedAt,
     }) => {
       let imgDownloadUrl = null;
-      console.log("avatarUrl", avatarUrl);
-      //const imgRef = ref(storage, avatarUrl);
-      //imgDownloadUrl = await getDownloadURL(imgRef);
       if (avatarUrl) {
         const url = await getUrl(avatarUrl);
         imgDownloadUrl = url;
@@ -93,16 +90,16 @@ exports.createUser = catchAsync(async (req, res, next) => {
   let imgDownloadUrl;
   if (req.file) {
     let countId = 0;
-    if (countClient.length > 0) {
-      countId = countClient.length + 1;
-    } else {
-      countId = 1;
+    const users = await User.max("id");
+    if (users) {
+      countId = users + 1;
     }
 
     //Upload img to Cloud Storage (Firebase)
+    const ext = req.file.originalname.split(".")[1];
     const imgRef = ref(
       storage,
-      `User avatar/${countId}-${Date.now()}-${req.file.originalname}`
+      `portfolio/user/ID-${countId}-${Date.now()}-user.${ext}`
     );
 
     resultUploadBytes = await uploadBytes(imgRef, req.file.buffer);
@@ -122,9 +119,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
     email,
     userName,
     password: hashedPassword,
-    //avatarUrl: req.file.path,
     avatarUrl: req.file ? resultUploadBytes.metadata.fullPath : null,
-    //avatarUrl: imgDownloadUrl,
     role,
   });
 
@@ -174,9 +169,10 @@ exports.updateUser = catchAsync(async (req, res, next) => {
       const UserId = user.id;
 
       //Upload img to Cloud Storage (Firebase)
+      const ext = req.file.originalname.split(".")[1];
       const imgRef = ref(
         storage,
-        `User avatar/${UserId}-${Date.now()}-${req.file.originalname}`
+        `portfolio/user/${UserId}-${Date.now()}-user.${ext}`
       );
       resultUploadBytes = await uploadBytes(imgRef, req.file.buffer);
 

@@ -10,26 +10,24 @@ const { storage } = require("../../util/firebase");
 
 //?CREATE NEW DOCUMENT
 exports.createDocument = catchAsync(async (req, res, next) => {
-  let countId;
-  const client = await Client.findAll();
-  if (client.length > 0) {
-    countId = client.length + 1;
-  } else {
-    countId = 1;
+  let countId = 1;
+  //const client = await Client.findAll();
+  const client = await Client.max("id");
+  if (client) {
+    countId = client + 1;
   }
 
   //Upload file
+  const extIneFront = req.files.docIneFront[0].originalname.split(".")[1];
+  const extIneReverse = req.files.docIneReverse[0].originalname.split(".")[1];
+
   const imgRefDocIneFront = ref(
     storage,
-    `ClientDocs/${countId}-${Date.now()}-${
-      req.files.docIneFront[0].originalname
-    }`
+    `portfolio/clientDocs/${countId}-${Date.now()}-INEFront.${extIneFront}`
   );
   const imgRefDocIneReverse = ref(
     storage,
-    `ClientDocs/${countId}-${Date.now()}-${
-      req.files.docIneReverse[0].originalname
-    }`
+    `portfolio/clientDocs/${countId}-${Date.now()}-INEReverse.${extIneReverse}`
   );
 
   const resultDocIneFront = await uploadBytes(

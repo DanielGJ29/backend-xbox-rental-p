@@ -42,7 +42,11 @@ exports.createVideoGame = catchAsync(async (req, res, next) => {
       countId = videoGames + 1;
     }
 
-    const imgRef = ref(storage, `xbox img/ID-${countId}-${Date.now()}-console`);
+    const ext = req.file.originalname.split(".")[1];
+    const imgRef = ref(
+      storage,
+      `portfolio/xbox/ID-${countId}-${Date.now()}-console.${ext}`
+    );
     result = await uploadBytes(imgRef, req.file.buffer);
     imgDownloadUrl = await getDownloadURL(imgRef);
   }
@@ -182,8 +186,6 @@ exports.updateVideoGame = catchAsync(async (req, res, next) => {
     }
   }
 
-  console.log("UBDATE", req.file);
-
   //Update Image
   if (req.file) {
     const imgRef = ref(storage, videoGame.imgUrl);
@@ -195,9 +197,10 @@ exports.updateVideoGame = catchAsync(async (req, res, next) => {
       const consoleId = videoGame.id;
       //Create new url for the new imagen
       //Upload image to cloud Storage (Firebase)
+      const ext = req.file.originalname.split(".")[1];
       const imgRef = ref(
         storage,
-        `xbox img/${consoleId}-${Date.now()}-${req.file.originalname}`
+        `portfolio/xbox/ID-${consoleId}-${Date.now()}-console.${ext}`
       );
       await uploadBytes(imgRef, req.file.buffer);
     }
